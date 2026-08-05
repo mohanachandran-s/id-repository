@@ -2,14 +2,26 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
 
 <suite name="Idrepository API Test">
-	<!-- Passing Group as parmeter unsing "testType" Possible Groups are: smoke 
+	<!-- Passing Group as parmeter unsing "testType" Possible Groups are: smoke
 		regression smokeAndRegression -->
 	<listeners>
 		<listener class-name="io.mosip.testrig.apirig.report.EmailableReport" />
 	</listeners>
 
+	<!-- anonymous_profile branch: dedicated to reproducing the "anonymous profile data goes null in
+		IDRepo DB under concurrent AddIdentity load" bug. Fires bursts of valid, independently-unique
+		AddIdentity requests at the same time in increasing thread counts (2,4,8,16,32,64,100) within
+		this one run. All other IdRepo suite tests are commented out below for this branch; uncomment
+		the block to restore the full suite. -->
+	<test name="ConcurrentAddIdentity">
+		<parameter name="ymlFile"
+			value="idRepository/ConcurrentAddIdentity/ConcurrentAddIdentity.yml" />
+		<classes>
+			<class name="io.mosip.testrig.apirig.idrepo.testscripts.ConcurrentAddIdentity" />
+		</classes>
+	</test>
 
-	<test name="AddIdentity">
+	<!-- ===== Rest of the standard IdRepo suite - commented out on this branch, restore by uncommenting ===== <test name="AddIdentity">
 		<parameter name="ymlFile"
 			value="idRepository/AddIdentity/AddIdentity.yml" />
 		<classes>
@@ -271,5 +283,6 @@
 			<class name="io.mosip.testrig.apirig.idrepo.testscripts.SimplePost" />
 		</classes>
 	</test>
+	===== end of commented-out standard suite ===== -->
 
 </suite>

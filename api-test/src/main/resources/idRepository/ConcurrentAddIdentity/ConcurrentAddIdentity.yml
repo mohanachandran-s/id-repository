@@ -1,0 +1,36 @@
+ConcurrentAddIdentity:
+   IdRepo_ConcurrentAddIdentity_LoadTest:
+      endPoint: /idrepository/v1/identity/
+      description: >
+        Bug-repro script (anonymous_profile row goes null/incomplete in the IDRepo DB when
+        multiple AddIdentity packets are processed by the server at the same time). This single
+        test case is used as the template for a burst of concurrently-fired, independently-valid
+        AddIdentity requests driven by ConcurrentAddIdentity.java - not executed row-by-row like a
+        normal YAML test case.
+      uniqueIdentifier: TC_IDRepo_ConcurrentAddIdentity_01
+      role: testrig
+      restMethod: post
+      inputTemplate: idRepository/AddIdentity/addIdentity_$LANGNUMBER$
+      outputTemplate: idRepository/AddIdentity/addIdentityResult
+      checkErrorsOnlyInResponse: true
+      input: '{
+  "value": "$BIOVALUE$",
+  "id": "mosip.id.create",
+  "registrationId": "$RID$",
+  "addressCopy": "Y",
+  "biometricReferenceId": "23452353",
+  "UIN": "$UIN$",
+  "dateOfBirth": "1992/04/15",
+  "postalCode": "14022",
+  "email": "$EMAILVALUE$",
+  "phone": "$PHONENUMBERFORIDENTITY$",
+  "referenceIdentityNumber": "6789545678878",
+  "version": "v1",
+  "introducerRID": "212124324784879",
+  "introducerUIN": "212124324784879",
+  "category": "individualBiometrics",
+  "requesttime": "$TIMESTAMP$"
+}'
+      output: '{
+  "status":"ACTIVATED"
+}'
